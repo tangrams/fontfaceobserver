@@ -135,13 +135,19 @@ goog.scope(function () {
     return new Promise(function (resolve, reject) {
       if (Observer.SUPPORTS_NATIVE) {
         var loader = new Promise(function (resolve, reject) {
+          var style = that.getStyle(that['family']);
+          if (document.fonts.check(style, testString)) {
+            resolve();
+            return;
+          }
+
           var check = function () {
             var now = that.getTime();
 
             if (now - start >= timeoutValue) {
               reject();
             } else {
-              document.fonts.load(that.getStyle(that['family']), testString).then(function (fonts) {
+              document.fonts.load(style, testString).then(function (fonts) {
                 if (fonts.length >= 1) {
                   resolve();
                 } else {
